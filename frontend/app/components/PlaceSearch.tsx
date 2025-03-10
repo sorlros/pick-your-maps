@@ -1,44 +1,53 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-// import Script from "next/script"; // ✅ next/script 사용
+import { LoadScript } from "@react-google-maps/api";
+import { useMapStore } from "@/store/useMapStore";
 
 interface PlaceResult {
   name?: string;
   formatted_address?: string;
 }
 
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
+const LIBRARIES: ("places")[] = ["places"];
+
 const PlacesSearch = () => {
-  const [query, setQuery] = useState<string>(""); // 검색어 상태
-  const [place, setPlace] = useState<PlaceResult | null>(null); // 선택한 장소 정보
+  const [query, setQuery] = useState<string>("");
+  const [, setPlace] = useState<PlaceResult | null>(null);
   const autocompleteRef = useRef<HTMLInputElement | null>(null);
+  const autocompleteInstance = useRef<google.maps.places.Autocomplete | null>(null);
+  const setCoordinate = useMapStore((state) => state.setCoordinate);
 
   useEffect(() => {
     if (!window.google || !autocompleteRef.current) return;
 
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      autocompleteRef.current,
-      { types: ["geocode"] } // 또는 ["establishment"] (장소 검색)
-    );
+    if (!autocompleteInstance.current) {
+      autocompleteInstance.current = new window.google.maps.places.Autocomplete(
+        autocompleteRef.current,
+        { types: ["geocode"] }
+      );
 
-    autocomplete.addListener("place_changed", () => {
-      const selectedPlace = autocomplete.getPlace();
-      setPlace({
-        name: selectedPlace.name,
-        formatted_address: selectedPlace.formatted_address,
+      autocompleteInstance.current.addListener("place_changed", () => {
+        const selectedPlace = autocompleteInstance.current?.getPlace();
+        if (selectedPlace && selectedPlace.geometry?.location) {
+          const newCenter = {
+            lat: selectedPlace.geometry.location.lat(),
+            lng: selectedPlace.geometry.location.lng(),
+          }
+          setCoordinate(newCenter);
+          setPlace({
+            name: selectedPlace.name,
+            formatted_address: selectedPlace.formatted_address,
+          });
+        }
       });
-    });
-  }, []);
+    }
+  }, [query]);
 
   return (
-    <>
-      {/* ✅ Google Maps API를 next/script로 추가 */}
-      {/* <Script
-        strategy="afterInteractive"
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-      /> */}
-      
-      <div className="w-full max-w-md mx-auto p-4">
+    <LoadScript googleMapsApiKey={API_KEY} libraries={LIBRARIES}>
+      <div className="w-full max-w-md mx-auto p-4 relative">
         <input
           ref={autocompleteRef}
           type="text"
@@ -47,14 +56,15 @@ const PlacesSearch = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        {place && (
-          <div className="mt-4 p-4 border rounded bg-gray-100">
+        {/* 추후 상호작용 UI로 만들 것 */}
+        {/* {place && (
+          <div className="mt-4 p-4 border rounded bg-gray-100 absolute bottom-[-5px] left-0">
             <h2 className="text-lg font-bold">{place.name}</h2>
             <p>{place.formatted_address}</p>
           </div>
-        )}
+        )} */}
       </div>
-    </>
+    </LoadScript>
   );
 };
 
