@@ -12,7 +12,7 @@ const Marker = ({position}: {position: MapState}) => {
   }, [position])
 
   return (
-    <div>
+    <div className="flex justify-center">
       <FlagIcon color="primary" fontSize="large" />
     </div>
   )

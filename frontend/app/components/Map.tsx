@@ -4,6 +4,7 @@ import { useMapStore } from "@/store/useMapStore";
 import { GoogleMap, LoadScript, OverlayView } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import Marker from "./Marker";
+import SlideMenu from "./SlideMenu";
 
 interface MapState {
     lat: number,
@@ -53,9 +54,14 @@ const MapComponent = () => {
           <OverlayView
             position={selectedLatLng}
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          >
-            <div className="absolute transform translate-x-[-50%] translate-y-[-100%]">
-              <Marker position={selectedLatLng} />
+          > 
+            <div className="relative">
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-full">
+                <Marker position={selectedLatLng} />
+                <div className="mt-2 justify-center">
+                  <SlideMenu />
+                </div>
+              </div>
             </div>
         </OverlayView>
         )}
