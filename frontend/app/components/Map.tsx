@@ -58,9 +58,12 @@ const MapComponent = () => {
             <div className="relative">
               <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-full">
                 <Marker position={selectedLatLng} />
-                <div className="mt-2 justify-center">
+                {/* <div className="mt-2 justify-center">
                   <SlideMenu />
-                </div>
+                </div> */}
+              </div>
+              <div className="absolute left-1/2 top-3/5 transform -translate-x-1/2 -translate-y-3/5">
+                <SlideMenu />
               </div>
             </div>
         </OverlayView>
