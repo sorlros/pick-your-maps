@@ -1,9 +1,13 @@
-// const express = require("express");
-// const router = express.Router();
-// const userController = require("../controllers/userController");
+import express from "express";
+import * as userController from "../controllers/userController";
+
+const router = express.Router();
 
 // // 유저 관련 엔드포인트
-// router.get("/", userController.getUsers);
-// router.post("/", userController.createUser);
+router.get("/getUsers", userController.getUsers);
+router.post("/createUser", userController.createUser);
 
-// module.exports = router;
+
+
+
+

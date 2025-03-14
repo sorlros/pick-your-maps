@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import memoRoutes from "./routes/memoRoutes";
 
 dotenv.config();
 
@@ -11,7 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 // 라우트 설정
-// import userRoutes from "./routes/userRoutes";
-// app.use("/api/users", userRoutes);
+app.use("/api/memos", memoRoutes);
+// app.use("/api/user", userRoutes);
+
 
 export default app;
