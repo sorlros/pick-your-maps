@@ -9,7 +9,8 @@ const NoteEditor = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // 클라이언트에서만 렌더링하도록 설정
+    setIsClient(true);
+    console.log("📢 NoteEditor 컴포넌트 렌더링됨.");
   }, []);
 
   const editor: Editor | null = useEditor({
@@ -22,17 +23,18 @@ const NoteEditor = () => {
     },
     // 🔥 이 부분 추가
     injectCSS: false,
+    immediatelyRender: false,
     // parseOptions: {
     //   immediatelyRender: false,
     // },
   });
 
-  if (!isClient || !editor) {
+  if (!isClient || !editor) { // useMemo.isOpen 확인 추가
     return null;
   }
 
   return (
-    <div>
+    <div className="absolute top-20 left-20 bg-white border border-gray-300 shadow-lg p-4 z-50">
       <EditorContent editor={editor} />
     </div>
   );

@@ -9,7 +9,17 @@ interface MemoStore {
 
 export const useMemoStore = create<MemoStore>((set, get) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
-  toggle: () => set({ isOpen: !get().isOpen }),
-}))
+  onOpen: () => {
+    console.log("📢 onOpen() 호출됨!"); // 상태 업데이트 로그
+    set({ isOpen: true });
+  },
+  onClose: () => {
+    console.log("📢 onClose() 호출됨!"); // 상태 업데이트 로그
+    set({ isOpen: false });
+  },
+  toggle: () => {
+    const newState = !get().isOpen;
+    console.log(`📢 toggle() 호출됨! 상태: ${newState}`); // 상태 업데이트 로그
+    set({ isOpen: newState });
+  },
+}));
