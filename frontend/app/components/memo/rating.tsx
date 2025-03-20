@@ -16,12 +16,17 @@ const labels: { [index: string]: string } = {
   5: 'Excellent+',
 };
 
+interface HoverRatingProps {
+  value: number | null;
+  onRatingChange: (newValue: number | null) => void;
+}
+
 function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 
-export default function HoverRating() {
-  const [value, setValue] = React.useState<number | null>(2);
+export default function HoverRating({ value, onRatingChange }: HoverRatingProps) {
+  // const [value, setValue] = React.useState<number | null>(2);
   const [hover, setHover] = React.useState(-1);
 
   return (
@@ -32,7 +37,7 @@ export default function HoverRating() {
         precision={0.5}
         getLabelText={getLabelText}
         onChange={(event, newValue) => {
-          setValue(newValue);
+          onRatingChange(newValue);
         }}
         onChangeActive={(event, newHover) => {
           setHover(newHover);

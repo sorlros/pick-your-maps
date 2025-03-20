@@ -20,7 +20,7 @@ export const getAllMemos = async () => {
   return memos;
 }
 
-export const createMemo = async (memoData) => {
+export const createMemo = async (memoData: MemoState) => {
   // prisma로 데이터 생성 및 mongoDB에 생성
   const newMemo = 
   return newMemo;

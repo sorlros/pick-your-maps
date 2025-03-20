@@ -16,26 +16,29 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
         setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-      onImageUpload(file);  // 부모 컴포넌트로 이미지 파일 전달
+      onImageUpload(file);
     }
   };
 
   const handleRemoveImage = () => {
     setPreview(null);
-    onImageUpload(null);  // 이미지 제거 시 부모 컴포넌트에 null 전달
+    onImageUpload(null);
   };
 
   return (
-    <div className="flex flex-col items-center space-y-2">
+    <div className="flex flex-col space-y-2">
       <input
         type="file"
         accept="image/*"
-        id="image-upload"
+        id="file-input"
         onChange={handleImageChange}
         className="hidden"
       />
-      <label htmlFor="image-upload">
-        <Button variant="outline">이미지 업로드</Button>
+      <label 
+        htmlFor="file-input" 
+        className="bg-transparent text-black border border-neutral-200 rounded-md px-4 py-2 cursor-pointer transition hover:bg-gray-100 active:bg-gray-200 shadow-xs outline-none"
+      >
+        이미지 선택
       </label>
       {preview && (
         <div className="mt-4 flex flex-col items-center">
