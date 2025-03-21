@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+// import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { useMemoStore } from '@/store/useMemoStore';
 
 const SlideMenu = () => {
@@ -18,10 +18,6 @@ const SlideMenu = () => {
     event.stopPropagation();
     console.log("123")
     memoState.onOpen();
-  }
-
-  const handleVote = () => {
-
   }
 
   return (

@@ -48,7 +48,6 @@ const MemoContainer = () => {
     let hasError = false;
 
     const title = (document.getElementById("name") as HTMLInputElement).value;
-    // const category = (document.getElementById("category") as HTMLSelectElement).value;
     const memo = (document.getElementById("memo") as HTMLInputElement).value;
 
     if (!title.trim()) {
@@ -67,18 +66,15 @@ const MemoContainer = () => {
 
     if (hasError) return;
 
-    // const title = (document.getElementById("name") as HTMLInputElement).value;
-    // // const category = (document.getElementById("category") as HTMLSelectElement).value;
-    // const memo = (document.getElementById("memo") as HTMLInputElement).value;
-
     const memoData = {
       title,
       category,
       memo,
-      rating, // HoverRating에서 선택된 평점 값
+      rating,
       tags: tags,
       image: image,
     };
+    // console.log("memoData", memoData);
 
     try {
       const formData = new FormData();
@@ -86,25 +82,26 @@ const MemoContainer = () => {
       formData.append("category", memoData.category);
       formData.append("memo", memoData.memo);
       formData.append("rating", String(memoData.rating));
-      formData.append("tags", JSON.stringify(memoData.tags));
+      formData.append("tags", JSON.stringify(memoData.tags.length > 0 ? memoData.tags : []));
       if (image) {
         formData.append("image", image);
       }
-
-
-      // console.log(title, category, memo, rating, tags, image)
       
-      const response = await fetch("/api/memo", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TO_BACKEND}/api/memo/createMemo`, {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        const newMemo = await response.json();
-        console.log("메모 생성 성공:", newMemo);
-        // 성공 후 처리 (예: 알림, 폼 초기화 등)
+        try {
+          const newMemo = await response.json();
+          console.log("메모 생성 성공:", newMemo);
+          // 성공 후 처리 (예: 알림, 폼 초기화 등)
+        } catch (error) {
+          console.error("JSON 파싱 오류:", error);
+        }
       } else {
-        console.error("메모 생성 실패");
+        console.error("메모 생성 실패", response.status);
       }
     } catch (error) {
       console.error("오류 발생:", error);

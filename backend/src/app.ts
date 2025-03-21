@@ -10,9 +10,10 @@ const app = express();
 // 미들웨어 설정
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // 라우트 설정
-app.use("/api/memos", memoRoutes);
+app.use("/api/memo", memoRoutes);
 // app.use("/api/user", userRoutes);
 
 

@@ -13,7 +13,7 @@ export const getMemos = async (req: Request, res: Response) => {
 
 export const createMemo = async (req: Request, res: Response) => {
   try {
-    const newMemo = await memoService.createMemo(req.body);
+    const newMemo = await memoService.createMemo(req, res);
     res.status(201).json(newMemo);
   } catch (error) {
     res.status(500).json({ message: "메모 생성 실패", error})
