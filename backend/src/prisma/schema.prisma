@@ -8,9 +8,11 @@ generator client {
 }
 
 model User {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String  @unique
-  password String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  memos     Memo[]
 }
 
 model Memo {
@@ -21,4 +23,6 @@ model Memo {
   rating    Int
   image     String?
   tags      String[] @default([])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }

@@ -21,10 +21,11 @@ export const getAllMemos = async () => {
 
 export const createMemo = async (req: Request, res: Response) => {
   try {
-    const { title, category, memo, rating, tags } = req.body;
+    const { title, category, memo, rating, tags, userId } = req.body;
     const image = req.file;
+    
     // const image = req.file ? req.file.path : null;
-    const parsedTags = tags ? JSON.parse(tags) : [];
+    // const parsedTags = tags ? JSON.parse(tags) : [];
 
     const newMemo = {
       title,
@@ -32,7 +33,8 @@ export const createMemo = async (req: Request, res: Response) => {
       memo,
       rating,
       tags,
-      image: image ? image.filename : null,
+      image: image ? image.filename : null, // 이후 이미지를 불러올때는 서버url/uploads/파일명
+      userId
     }
 
     console.log("Received Memo Data:", { newMemo });
@@ -54,7 +56,7 @@ export const createMemo = async (req: Request, res: Response) => {
     // res.status(200).json({ success: true, memo: newMemo });
     res.status(201).json({
       message: "메모가 생성되었습니다.",
-      data: { title, category, memo, rating, tags, image }, // 파일 정보도 포함
+      data: { title, category, memo, rating, tags, image },
     });
   } catch (error) {
     console.error("Error creating memo:", error);
