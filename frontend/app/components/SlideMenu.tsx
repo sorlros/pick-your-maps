@@ -7,7 +7,7 @@ import { useMemoStore } from '@/store/useMemoStore';
 
 const SlideMenu = () => {
   const [click, setClick] = useState<boolean>(false);
-  const memoState = useMemoStore();
+  const memoModal = useMemoStore();
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -17,7 +17,8 @@ const SlideMenu = () => {
   const handleNote = (event: React.MouseEvent) => {
     event.stopPropagation();
     console.log("123")
-    memoState.onOpen();
+    memoModal.onOpen();
+    console.log("memo", memoModal.isOpen)
   }
 
   return (

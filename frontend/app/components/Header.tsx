@@ -1,12 +1,12 @@
 import React from 'react'
 import PlacesSearch from './PlaceSearch'
-import Login from './user/Login'
+import LoginButton from './user/LoginButton'
 
 const Header = () => {
   return (
     <div className="flex w-[70vw] h-[56px] bg-white rounded-xl items-center">
       <PlacesSearch />
-      <Login />
+      <LoginButton />
       {/* <Register /> */}
     </div>
   )
