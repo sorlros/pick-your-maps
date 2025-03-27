@@ -49,12 +49,14 @@ export const loginUser = async (req: Request<unknown, unknown, UserType>, res: R
   }
 }
 
-export const createUser = async (req: Request<unknown, unknown, UserType>, res: Response) => {
+export const createUser = async (userData: UserType) => {
   try {
-    const { email, password } = req.body;
+    // const { email, password } = req.body;
+    const { email, password } = userData;
     
     if (!email || !password) {
-      return res.status(400).json({ message: "이메일과 비밀번호를 모두 입력해주세요" });
+      // return res.status(400).json({ message: "이메일과 비밀번호를 모두 입력해주세요" });
+      return { error: "이메일과 비밀번호를 모두 입력해주세요", status: 400 };
     }
 
     const existingUser = await prisma.user.findUnique({
@@ -62,7 +64,8 @@ export const createUser = async (req: Request<unknown, unknown, UserType>, res: 
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "이미 존재하는 이메일입니다" });
+      // return res.status(400).json({ message: "이미 존재하는 이메일입니다" });
+      return { error: "이미 존재하는 이메일입니다", status: 400 };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -72,10 +75,20 @@ export const createUser = async (req: Request<unknown, unknown, UserType>, res: 
         password: hashedPassword
       }
     })
+
+    if (!newUser.id) {
+      return { error: "DB에서 유저생성 실패", status: 400 };
+    }
+    // if (madeUser) {
+    //   const userId = madeUser.id
+    //   return { userId, status: 201 };
+    // }
     // const newUser = await userService.createUser(req.body);
-    return res.status(201).json({ message: "회원가입 성공", userId: newUser.id });
+    // return res.status(201).json({ message: "회원가입 성공", userId: newUser.id });
+    console.log("userService: ", newUser);
+    return { userId: newUser.id, status: 201 };
   } catch (error) {
     console.error("회원가입 오류:", error);
-    res.status(500).json({ message: "회원가입 서버 오류" });
+    return { error: "회원가입 서버 오류", status: 500 };
   }
 };

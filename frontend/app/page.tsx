@@ -30,7 +30,7 @@ export default function Home() {
       
       <div className="absolute inset-0 flex justify-center items-center">
         {isOpenAuth && (
-          <div className="w-[40%] h-[70%] z-20 pointer-events-auto">
+          <div className="w-[40%] max-md:w-[80%] h-[70%] z-20 pointer-events-auto">
             <Login />
           </div>
         )}
