@@ -21,9 +21,13 @@ import { useMemoStore } from "@/store/useMemoStore"
 import HoverRating from "@/components/memo/rating"
 import TagInput from "@/components/memo/tagInput"
 import ImageUpload from "@/components/memo/ImageUpload"
+import { useAuthStore } from "@/store/useAuthStore"
 
 const MemoContainer = () => {
   const onClose = useMemoStore((state) => state.onClose);
+  const userId = useAuthStore((state) => state.userId);
+
+  const token = localStorage.getItem("token");
 
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<File | null>(null);
@@ -44,8 +48,16 @@ const MemoContainer = () => {
     setCategory(newCategory);
   };
 
+  const checkToken = () => {
+    if (!token) {
+      throw new Error("토큰이 존재하지 않습니다");
+    }
+  }
+
   const handleSave = async () => {
     let hasError = false;
+
+    checkToken();
 
     const title = (document.getElementById("name") as HTMLInputElement).value;
     const memo = (document.getElementById("memo") as HTMLInputElement).value;
@@ -73,6 +85,7 @@ const MemoContainer = () => {
       rating,
       tags: tags,
       image: image,
+      userId,
     };
     // console.log("memoData", memoData);
 
@@ -83,6 +96,8 @@ const MemoContainer = () => {
       formData.append("memo", memoData.memo);
       formData.append("rating", String(memoData.rating));
       formData.append("tags", JSON.stringify(memoData.tags.length > 0 ? memoData.tags : []));
+      formData.append("userId", memoData.userId);
+
       if (image) {
         formData.append("image", image);
       }
@@ -90,6 +105,10 @@ const MemoContainer = () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_TO_BACKEND}/api/memo/createMemo`, {
         method: "POST",
         body: formData,
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+        // 확인할 것
       });
 
       if (response.ok) {

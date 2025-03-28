@@ -7,7 +7,6 @@ const router = express.Router();
 
 
 router.get("/getAllMemos", memoController.getMemos);
-// router.post("/createMemo", memoController.createMemo);
 router.post("/createMemo", upload.single("image"), memoController.createMemo);
 
 export default router;

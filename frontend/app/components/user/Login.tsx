@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/store/authStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import React, { useState } from "react"
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -13,6 +13,8 @@ const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState<boolean>(true);
 
   const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+  const onClose = useAuthStore((state) => state.onClose);
+  const setUserId = useAuthStore((state) => state.setUserId);
 
   const handleLogin = async () => {
     if (email && password) {
@@ -26,10 +28,21 @@ const Login = () => {
         });
 
         if (!response.ok) {
+          console.error(response);
           throw new Error("로그인 실패");
         }
+        // cors 에러 발생중
   
         const data = await response.json();
+        console.log("loginData", data)
+
+        if (data.status === 200) {
+          localStorage.setItem("token", data.token);
+          console.log("userId", data.userId);
+          setUserId(data.userId as string);
+        } else {
+          console.log(data.error);
+        }
         setIsLoggedIn(true);
         alert("로그인 성공");
       } catch (error) {
@@ -71,12 +84,21 @@ const Login = () => {
     }
   }
 
+  const handleClose = () => {
+    onClose();
+  }
+
   return (
     <div className="flex justify-center min-w-full lg:h-full md:h-[70%] sm:h-[65%] bg-white rounded-lg max-sm:pb-3">
       <div className="flex flex-col min-w-[70%] gap-y-3 mt-8">
-        <div className="">
-          <h2>로그인</h2>
-        </div> 
+        <div className="flex justify-between w-full items-center">
+          <div className="">
+            <h2>로그인</h2>
+          </div>
+          <div className="flex items-center justify-center cursor-pointer w-[24px] h-[24px] rounded-full hover:bg-neutral-300">
+            <span className="text-[16px]" onClick={handleClose}>✖</span>
+          </div>
+        </div>
         <div>
           <Input
             type="email"

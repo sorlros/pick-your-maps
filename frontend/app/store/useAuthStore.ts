@@ -6,6 +6,8 @@ interface AuthState {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  userId: string;
+  setUserId: (value: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -18,4 +20,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   onClose: () => {
     set({ isOpen: false });
   },
+  userId: "",
+  setUserId: (value: string) => set({
+    userId: value,
+  })
 }));

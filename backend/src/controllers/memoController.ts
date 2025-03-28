@@ -2,7 +2,7 @@
 import * as memoService from "../services/memoService";
 import { Request, Response } from "express";
 
-export const getMemos = async (req: Request, res: Response) => {
+export const getMemos = async (req: Request, res: Response): Promise<void> => {
   try {
     const memos = await memoService.getAllMemos();
     res.json(memos);
@@ -11,9 +11,9 @@ export const getMemos = async (req: Request, res: Response) => {
   }
 }
 
-export const createMemo = async (req: Request, res: Response) => {
+export const createMemo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newMemo = await memoService.createMemo(req, res);
+    const newMemo = await memoService.createMemo(req.body);
     res.status(201).json(newMemo);
   } catch (error) {
     res.status(500).json({ message: "메모 생성 실패", error})

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../ui/button'
-import { useAuthStore } from '@/store/authStore'
+import { useAuthStore } from '@/store/useAuthStore'
 
 const LoginButton = () => {
   const setOpen = useAuthStore((state) => state.onOpen);

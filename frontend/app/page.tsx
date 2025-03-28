@@ -7,7 +7,7 @@ import MapComponent from "./components/Map";
 import { useMemoStore } from "./store/useMemoStore";
 import MemoContainer from "./components/memo/Container";
 import Login from "./components/user/Login";
-import { useAuthStore } from "./store/authStore";
+import { useAuthStore } from "./store/useAuthStore";
 
 export default function Home() {
   const isOpenMemo = useMemoStore((state) => state.isOpen);
