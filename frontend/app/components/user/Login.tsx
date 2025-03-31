@@ -5,6 +5,7 @@ import React, { useState } from "react"
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Image from 'next/image';
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -34,22 +35,24 @@ const Login = () => {
         // cors 에러 발생중
   
         const data = await response.json();
-        console.log("loginData", data)
+        // console.log("loginData", data)
 
-        if (data.status === 200) {
+        if (response.status === 200) {
           localStorage.setItem("token", data.token);
-          console.log("userId", data.userId);
+          // console.log("userId", data.userId);
           setUserId(data.userId as string);
+          setIsLoggedIn(true);
+          onClose();
+          toast.success(`로그인 성공`);
         } else {
           console.log(data.error);
+          toast.error("로그인 실패했습니다");
         }
         setIsLoggedIn(true);
-        alert("로그인 성공");
+        // alert("로그인 성공");
       } catch (error) {
         console.error(error);
       }
-      setIsLoggedIn(true);
-      alert("로그인 성공");
     } else {
       alert("이메일과 비밀번호를 입력해주세요");
     }

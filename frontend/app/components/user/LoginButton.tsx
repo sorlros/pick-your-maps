@@ -9,7 +9,7 @@ const LoginButton = () => {
   }
 
   return (
-    <Button onClick={handleOpen}>로그인</Button>
+    <Button className="w-[56px] h-[56px]" onClick={handleOpen}>로그인</Button>
   )
 }
 

@@ -8,15 +8,17 @@ const Header = () => {
   const isLogin = useAuthStore((state) => state.isLoggedIn);
 
   return (
-    <div className="flex w-[70vw] h-[56px] bg-white rounded-xl items-center">
-      <PlacesSearch />
-      
-      {isLogin ? (
-        <UserProfile />
-      ) : (
-        <LoginButton />
-      )}
-      {/* <Register /> */}
+    <div className="flex gap-x-4">
+      <div className="flex w-full h-[56px] bg-white rounded-xl items-center">
+        <PlacesSearch />
+      </div>
+      <div>
+        {isLogin ? (
+          <UserProfile />
+        ) : (
+          <LoginButton />
+        )}
+      </div>
     </div>
   )
 }

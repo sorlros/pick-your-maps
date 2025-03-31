@@ -12,7 +12,7 @@ interface MemoData {
   category: string;
   memo: string;
   rating: number;
-  tags: string[];
+  tags?: string[];
   userId: string;
   file?: string;
 }
@@ -35,14 +35,14 @@ export const createMemo = async (memoData: MemoData) => {
     const image = memoData.file;
     
     // const image = req.file ? req.file.path : null;
-    // const parsedTags = tags ? JSON.parse(tags) : [];
+    const parsedTags = Array.isArray(tags) ? tags : tags ? JSON.parse(tags) : [];
 
     const newMemo = {
       title,
       category,
       memo,
       rating,
-      tags,
+      tags: parsedTags,
       image: image ? image : null, // 이후 이미지를 불러올때는 서버url/uploads/파일명
       userId
     }

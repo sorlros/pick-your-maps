@@ -17,9 +17,9 @@ export default function Home() {
     <>
       <div className="w-screen h-screen flex flex-col">
       {/* 맵과 헤더 컨테이너 */}
-      <div className={`relative flex-1 z-10 ${(isOpenMemo || isOpenAuth) ? "pointer-events-none" : ""}`}>
+      <div className={`relative flex-1 z-10 ${(isOpenMemo || isOpenAuth) ? "pointer-events-none" : "pointer-events-auto"}`}>
         <MapComponent />
-        <div className="absolute top-0 left-0 w-full px-6 py-8">
+        <div className="w-[80%] h-[56px] sm:w-4/5 md:w-2/3 lg:w-1/2 absolute top-[24px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 py-8 z-20">
           <Header />
         </div>
       </div>
