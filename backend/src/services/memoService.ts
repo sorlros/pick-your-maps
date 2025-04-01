@@ -1,85 +1,74 @@
-// import { Request, Response } from 'express';
+import { Request } from 'express';
 import prisma from '../prisma/client';
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-// interface MemoState {
-//   userId: number;
-//   content: string;
-//   vote: number;
-// }
-
-interface MemoData {
-  title: string;
-  category: string;
-  memo: string;
-  rating: number;
-  tags?: string[];
-  userId: string;
-  file?: string;
-}
-
-// const memos: MemoState[] = [];
-
-export const getAllMemos = async () => {
+export const getAllMemos = async (req: Request) => {
   try {
-    const memos = await prisma.memo.findMany();
-    return memos;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return { error: "인증 정보가 필요합니다.", status: 401 };
+    }
+
+    const token = authHeader.split(" ")[1];
+    
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET 환경 변수가 설정되지 않았습니다.");
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+
+    if (!decoded || typeof decoded !== "object" || !decoded.userId) {
+      return { error: "userId를 찾을 수 없습니다.", status: 400 };
+    }
+
+    const userId = decoded.userId as string;
+
+    const memos = await prisma.memo.findMany({
+      where: { userId },
+    });
+    return { data: memos, status: 200 };
   } catch (error) {
     console.error("getAllMemos 오류", error);
-    throw new Error("getAllMemos 오류");
+    return { error: "getAllMemos 오류", status: 500 };
   }
 }
 
-export const createMemo = async (memoData: MemoData) => {
+export const createMemo = async (req: Request) => {
   try {
-    const { title, category, memo, rating, tags, userId } = memoData
-    const image = memoData.file;
-    
-    // const image = req.file ? req.file.path : null;
+    const { title, category, memo, tags, userId, rating } = req.body;
+    const image = req.file ? req.file.path : "";
+
+    const parsedRating = typeof rating === "number" ? rating : parseFloat(rating);
     const parsedTags = Array.isArray(tags) ? tags : tags ? JSON.parse(tags) : [];
 
-    const newMemo = {
-      title,
-      category,
-      memo,
-      rating,
-      tags: parsedTags,
-      image: image ? image : null, // 이후 이미지를 불러올때는 서버url/uploads/파일명
-      userId
-    }
-
-    if (!memoData) {
+    if (!req.body) {
       return { error: "memoData 생성 오류", status: 500 };
     }
 
-    // console.log("Received Memo Data:", { newMemo });
-
-    // const newMemo = await prisma.memo.create({
-    //   data: {
-    //     title,
-    //     category,
-    //     memo,
-    //     rating,
-    //     tags,
-    //     image,
-    //   },
-    // });
-
-    console.log("Created Memo:", newMemo, "dataType", typeof image); // 응답 데이터 로그 추가
-
-    // res.status(201).json(newMemo); // 정상적으로 데이터를 반환
-    // res.status(200).json({ success: true, memo: newMemo });
-    // res.status(201).json({
-    //   message: "메모가 생성되었습니다.",
-    //   data: { title, category, memo, rating, tags, image },
-    // });
+    await prisma.memo.create({
+      data: {
+        title,
+        category,
+        memo,
+        rating: parsedRating,
+        tags: parsedTags,
+        image, // 이미지 경로 저장
+        userId,
+      },
+    });
+    
+    // const verifyData = {
+    //   title, category, memo, rating: parsedRating, tags: parsedTags, image
+    // }
+    // console.log("최종data: ", veriData);
     return { 
       message: "메모가 생성되었습니다",
-      data: { title, category, memo, rating, tags, image },
+      data: { title, category, memo, rating: parsedRating, tags: parsedTags, image },
       status: 201
     };
   } catch (error) {
     console.error("Error creating memo:", error);
-    // res.status(500).json({ success: false, error: '메모 생성 실패' });
-    return { message: "메모 생설 실패", status: 500 };
+    return { message: "메모 생성 실패", status: 500 };
   }
-}
+};

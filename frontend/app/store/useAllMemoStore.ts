@@ -1,13 +1,12 @@
 import { create } from "zustand";
 
-interface MemoStore {
+interface AllMemoStore {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  toggle: () => void;
 }
 
-export const useMemoStore = create<MemoStore>((set, get) => ({
+const useAllMemo = create<AllMemoStore>((set) => ({
   isOpen: false,
   onOpen: () => {
     set({ isOpen: true });
@@ -15,8 +14,6 @@ export const useMemoStore = create<MemoStore>((set, get) => ({
   onClose: () => {
     set({ isOpen: false });
   },
-  toggle: () => {
-    const newState = !get().isOpen;
-    set({ isOpen: newState });
-  },
-}));
+}))
+
+export default useAllMemo;
