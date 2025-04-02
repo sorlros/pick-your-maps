@@ -24,9 +24,10 @@ const UserPlaces = () => {
       if (!response.ok) {
         throw new Error("저장된 장소 메모 데이터 로드 실패");
       }
-
       const data = await response.json();
       setUserMemoData(data);
+      console.log("Data", data)
+      console.log("userMemoData", userMemoData)
     } catch (error) {
       console.error(error);
     } finally {
@@ -40,18 +41,17 @@ const UserPlaces = () => {
 
   return (
     <>
-    {isLoading ? (
-      <div>
+      {isLoading ? (
         <li className="py-2 px-4 text-sm hover:bg-gray-100">
           <Loading />
+        </li> ) : (
+        <li 
+          className="py-2 px-4 text-sm cursor-pointer hover:bg-gray-100"
+          onClick={handleLoadUserPlaces}
+        >
+          저장한 장소
         </li>
-      </div>
-    ) : (
-      <div onClick={handleLoadUserPlaces}>
-        <li className="py-2 px-4 text-sm cursor-pointer hover:bg-gray-100">저장한 장소</li>
-      {/* {isLoading && <p>로딩 중...</p>} */}
-      </div>
-    )}
+      )}
     </>
   )
 }
