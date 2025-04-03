@@ -22,10 +22,13 @@ import HoverRating from "@/components/memo/rating"
 import TagInput from "@/components/memo/tagInput"
 import ImageUpload from "@/components/memo/ImageUpload"
 import { useAuthStore } from "@/store/useAuthStore"
+import { useMapStore } from "@/store/useMapStore"
+import { toast } from "sonner"
 
 const MemoContainer = () => {
   const onClose = useMemoStore((state) => state.onClose);
   const userId = useAuthStore((state) => state.userId);
+  const coordinate = useMapStore((state) => state.coordinate);
 
   const token = localStorage.getItem("token");
 
@@ -86,6 +89,7 @@ const MemoContainer = () => {
       tags: tags,
       image: image,
       userId,
+      coordinate
     };
     // console.log("memoData", memoData);
 
@@ -101,6 +105,8 @@ const MemoContainer = () => {
       if (image) {
         formData.append("image", image);
       }
+
+      formData.append("coordinate", JSON.stringify(memoData.coordinate));
       
       const response = await fetch(`${process.env.NEXT_PUBLIC_TO_BACKEND}/api/memo/createMemo`, {
         method: "POST",
@@ -115,7 +121,8 @@ const MemoContainer = () => {
         try {
           const newMemo = await response.json();
           console.log("메모 생성 성공:", newMemo);
-          // 성공 후 처리 (예: 알림, 폼 초기화 등)
+          toast.success("메모 생성에 성공했습니다");
+          onClose();
         } catch (error) {
           console.error("JSON 파싱 오류:", error);
         }

@@ -36,11 +36,12 @@ export const getAllMemos = async (req: Request) => {
 
 export const createMemo = async (req: Request) => {
   try {
-    const { title, category, memo, tags, userId, rating } = req.body;
+    const { title, category, memo, tags, userId, rating, coordinate } = req.body;
     const image = req.file ? req.file.path : "";
 
     const parsedRating = typeof rating === "number" ? rating : parseFloat(rating);
     const parsedTags = Array.isArray(tags) ? tags : tags ? JSON.parse(tags) : [];
+    const parsedCoordinate = JSON.parse(coordinate);
 
     if (!req.body) {
       return { error: "memoData 생성 오류", status: 500 };
@@ -55,6 +56,7 @@ export const createMemo = async (req: Request) => {
         tags: parsedTags,
         image, // 이미지 경로 저장
         userId,
+        coordinate: parsedCoordinate
       },
     });
     
@@ -64,7 +66,9 @@ export const createMemo = async (req: Request) => {
     // console.log("최종data: ", veriData);
     return { 
       message: "메모가 생성되었습니다",
-      data: { title, category, memo, rating: parsedRating, tags: parsedTags, image },
+      data: { 
+        title, category, memo, rating: parsedRating, tags: parsedTags, image, coordinate: parsedCoordinate 
+      },
       status: 201
     };
   } catch (error) {

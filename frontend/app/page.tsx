@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./components/Header";
 import MapComponent from "./components/Map";
 // import NoteEditor from "./components/Memo";
@@ -8,10 +8,20 @@ import { useMemoStore } from "./store/useMemoStore";
 import MemoContainer from "./components/memo/Container";
 import Login from "./components/user/Login";
 import { useAuthStore } from "./store/useAuthStore";
+import { toast } from "sonner";
 
 export default function Home() {
   const isOpenMemo = useMemoStore((state) => state.isOpen);
   const isOpenAuth = useAuthStore((state) => state.isOpen);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const closeMemo = useMemoStore((state) => state.onClose);
+
+  useEffect(() => {
+    if (isOpenMemo && !isLoggedIn) {
+      toast.error("로그인이 필요합니다");
+      closeMemo();
+    }
+  }, [isOpenMemo, isLoggedIn]);
 
   return ( 
     <>
@@ -24,7 +34,7 @@ export default function Home() {
         </div>
       </div>
 
-      {(isOpenMemo || isOpenAuth) && (
+      {((isOpenMemo && isLoggedIn) || isOpenAuth) && (
         <div className="absolute inset-0 bg-black opacity-[50%] z-10 pointer-events-none" />
       )}
       
@@ -35,27 +45,12 @@ export default function Home() {
           </div>
         )}
 
-        {isOpenMemo && (
+        {isOpenMemo && isLoggedIn ? (
           <div className="absolute z-20 pointer-events-auto">
             <MemoContainer />
           </div>
-        )}
+        ) : null }
       </div>
-
-      {/* 로그인 및 메모 컨테이너 */}
-      {/* <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-        {isOpenAuth && (
-          <div className={`w-[40%] h-[70%] pointer-events-auto`}>
-          <Login />
-        </div>
-        )}
-      
-        {isOpenMemo && (
-          <div className="absolute z-20">
-            <MemoContainer />
-          </div>
-        )}
-      </div> */}
     </div>
     </>
   );

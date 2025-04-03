@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-interface UserMemoStore {
+interface MapState {
+  lat: number,
+  lng: number
+}
+
+interface MemoData {
+  id: string;
   title: string;
   category: string;
   memo: string;
@@ -8,29 +14,40 @@ interface UserMemoStore {
   tags?: string[];
   userId: string;
   file?: string;
-  setUserMemo: (memoData: UserMemoStore) => void;
-  getUserMemo: () => UserMemoStore;
+  coordinate: MapState;
+}
+
+interface UserMemoStore {
+  memos: MemoData[];
+  addAllMemos: (allMemoData: MemoData[]) => void;
+  updateUserMemo: (id: string, updatedData: Partial<MemoData>) => void;
+  deleteUserMemo: (id: string) => void;
+  getUserMemos: () => MemoData[];
 }
 
 const useUserMemoStore = create<UserMemoStore>((set, get) => ({
-  title: "",
-  category: "",
-  memo: "",
-  rating: 0,
-  tags: [""],
-  userId: "",
-  file: "",
+  memos: [],
 
-  setUserMemo: (memoData: UserMemoStore) => set(() => ({
-    title: memoData.title,
-    category: memoData.category,
-    memo: memoData.memo,
-    rating: memoData.rating,
-    tags: memoData.tags ?? [""],
-    userId: memoData.userId,
-    file: memoData.file ?? "",
-  })),
-  getUserMemo: () => get(),
+  // 특정 메모 수정
+  updateUserMemo: (id, updatedData) =>
+    set((state) => ({
+      memos: state.memos.map((memo) =>
+        memo.id === id ? { ...memo, ...updatedData } : memo
+      ),
+    })),
+
+  // 특정 메모 삭제
+  deleteUserMemo: (id) =>
+    set((state) => ({
+      memos: state.memos.filter((memo) => memo.id !== id),
+    })),
+
+  // 모든 메모 가져오기
+  getUserMemos: () => get().memos,
+  addAllMemos: (allMemoData) =>
+    set(() => ({
+      memos: allMemoData,
+    })),
 }))
 
 export default useUserMemoStore;

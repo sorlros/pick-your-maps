@@ -16,7 +16,7 @@ const SlideMenu = () => {
 
   const handleNote = (event: React.MouseEvent) => {
     event.stopPropagation();
-    console.log("123")
+    // console.log("123")
     memoModal.onOpen();
     console.log("memo", memoModal.isOpen)
   }
