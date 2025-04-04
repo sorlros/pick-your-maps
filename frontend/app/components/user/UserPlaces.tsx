@@ -1,14 +1,14 @@
 import useUserMemoStore from '@/store/useUserMemoStore';
 import React, { useState } from 'react'
 import Loading from '../ui/spinner';
+import { useAllMemoStore } from '@/store/allMemoStore';
 // import { useAuthStore } from '@/store/useAuthStore';
 
 const UserPlaces = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const setUserMemoData = useUserMemoStore((state) => state.setUserMemo);
   const userMemoData = useUserMemoStore((state) => state.getUserMemos);
-  // const userId = useAuthStore((state) => state.userId);
   const addAllMemo = useUserMemoStore((state) => state.addAllMemos);
+  const isOpen = useAllMemoStore((state) => state.onOpen);
 
   const handleLoadUserPlaces = async () => {
     setIsLoading(true);
@@ -28,6 +28,7 @@ const UserPlaces = () => {
       const data = await response.json();
       addAllMemo(data);
       console.log("모든 메모: ", userMemoData());
+      isOpen();
       // setUserMemoData(data);
       // console.log("Data", data)
       // console.log("userMemoData", userMemoData)
