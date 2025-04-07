@@ -21,11 +21,15 @@ interface HoverRatingProps {
   onRatingChange: (newValue: number | null) => void;
 }
 
+interface ReadOnlyRatingProps {
+  value: number;
+}
+
 function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 
-export default function HoverRating({ value, onRatingChange }: HoverRatingProps) {
+export function HoverRating({ value, onRatingChange }: HoverRatingProps) {
   // const [value, setValue] = React.useState<number | null>(2);
   const [hover, setHover] = React.useState(-1);
 
@@ -48,6 +52,24 @@ export default function HoverRating({ value, onRatingChange }: HoverRatingProps)
       {value !== null && (
         <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
       )}
+    </Box>
+  );
+}
+
+export function ReadOnlyRating({ value }: ReadOnlyRatingProps) {
+  return (
+    <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
+      <Rating
+        name="hover-feedback"
+        value={value}
+        precision={0.5}
+        // getLabelText={getLabelText}
+        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+      />
+      <input type="number" value={value ?? ""} hidden readOnly />
+      {/* {value !== null && (
+        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+      )} */}
     </Box>
   );
 }

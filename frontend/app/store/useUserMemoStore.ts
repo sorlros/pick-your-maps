@@ -13,7 +13,7 @@ interface MemoData {
   rating: number;
   tags?: string[];
   userId: string;
-  file?: string;
+  image?: string;
   coordinate: MapState;
 }
 

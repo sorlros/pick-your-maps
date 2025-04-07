@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
         hostname: 'robohash.org',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost:8080',
+        port: '',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };

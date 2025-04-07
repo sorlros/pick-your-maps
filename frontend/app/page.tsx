@@ -58,10 +58,9 @@ export default function Home() {
           <div
             className={`
               absolute w-[80%] sm:w-[80%] md:w-[60%] lg:w-[40%] h-[70vh] z-30 
-              top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2
-              transition-transform duration-300
-              ${allMemoModal ? "translate-x-2/3" : "translate-x-[100%]"}
-              pointer-events-auto
+              top-1/2 left-1/2 -translate-x-1/2
+              transition-transform duration-500 ease-in-out
+              ${allMemoModal ? "-translate-y-1/2 opacity-100 pointer-events-auto" : "-translate-y-[200%] opacity-0 pointer-events-none"}
             `}
           >
             <AllMemo />

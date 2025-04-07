@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useMemoStore } from "@/store/useMemoStore"
-import HoverRating from "@/components/memo/rating"
+import { HoverRating } from "@/components/memo/rating"
 import TagInput from "@/components/memo/tagInput"
 import ImageUpload from "@/components/memo/ImageUpload"
 import { useAuthStore } from "@/store/useAuthStore"

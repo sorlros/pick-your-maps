@@ -38,6 +38,7 @@ export const createMemo = async (req: Request) => {
   try {
     const { title, category, memo, tags, userId, rating, coordinate } = req.body;
     const image = req.file ? req.file.path : "";
+    console.log("backend image", image);
 
     const parsedRating = typeof rating === "number" ? rating : parseFloat(rating);
     const parsedTags = Array.isArray(tags) ? tags : tags ? JSON.parse(tags) : [];
