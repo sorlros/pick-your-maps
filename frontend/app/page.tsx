@@ -17,7 +17,7 @@ export default function Home() {
   const isOpenAuth = useAuthStore((state) => state.isOpen);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const closeMemo = useMemoStore((state) => state.onClose);
-  const allMemoModal = useAllMemoStore((state) => state.isOpen)
+  const allMemoModal = useAllMemoStore((state) => state.isOpen);
 
   useEffect(() => {
     if (isOpenMemo && !isLoggedIn) {
@@ -66,12 +66,6 @@ export default function Home() {
             <AllMemo />
           </div>
         )}
-        
-         {/* {allMemoModal && (
-          <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-            <AllMemo />
-          </div>
-        )} */}
       </div>
     </>
   );

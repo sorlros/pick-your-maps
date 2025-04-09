@@ -1,38 +1,24 @@
 import useUserMemoStore from '@/store/useUserMemoStore'
 import Image from 'next/image';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ReadOnlyRating } from './rating';
 import { X } from 'lucide-react';
-import useAllMemoStore from '@/store/useAllMemoStore';
+import { useAllMemoStore } from "@/store/allMemoStore";
 import { useMapStore } from '@/store/useMapStore';
 
 const AllMemo = () => {
   const allMemo = useUserMemoStore((state) => state.memos);
   const closeModal = useAllMemoStore((state) => state.onClose)
   const setCoordinate = useMapStore((state) => state.setCoordinate);
-  const dummyMemos = [
-    {
-      id: "1",
-      title: "맛집 기록",
-      memo: "강남역 근처 이자카야 정말 맛있었음!",
-      tags: ["음식", "강남"],
-    },
-    {
-      id: "2",
-      title: "여행 메모",
-      memo: "부산 해운대 도착, 바닷바람 최고.",
-      tags: ["여행", "부산"],
-    },
-  ]
 
-  useEffect(() => {
-    console.log(allMemo);
-  } , [allMemo])
+  const handleClose = () => {
+    closeModal();
+  }
 
   return (
     <div className="relative w-full h-full bg-neutral-800 rounded-xl p-4">
       <button
-        onClick={closeModal}
+        onClick={handleClose}
         className="absolute top-4 right-4 text-white hover:text-red-400 transition z-50"
       >
         <X size={24} />

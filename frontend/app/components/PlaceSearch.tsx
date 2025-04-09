@@ -47,22 +47,15 @@ const PlacesSearch = () => {
 
   return (
     <LoadScript googleMapsApiKey={API_KEY} libraries={LIBRARIES}>
-      <div className="w-full max-w-md mx-auto p-4 relative">
+      <div className="w-full px-4 py-2 sm:py-4 max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
         <input
           ref={autocompleteRef}
           type="text"
           placeholder="장소를 검색하세요"
-          className="w-full p-2 border rounded"
+          className="w-full p-3 sm:p-4 text-sm sm:text-base border-none focus:border-none"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        {/* 추후 상호작용 UI로 만들 것 */}
-        {/* {place && (
-          <div className="mt-4 p-4 border rounded bg-gray-100 absolute bottom-[-5px] left-0">
-            <h2 className="text-lg font-bold">{place.name}</h2>
-            <p>{place.formatted_address}</p>
-          </div>
-        )} */}
       </div>
     </LoadScript>
   );

@@ -49,7 +49,6 @@ const MapComponent = () => {
   return (
     <LoadScript googleMapsApiKey={API_KEY} libraries={LIBRARIES}>
       <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={14} onClick={handleClickMap}>
-        {/* 여기에 마커 추가 가능 */}
         {selectedLatLng && (
           <OverlayView
             position={selectedLatLng}
