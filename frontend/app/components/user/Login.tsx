@@ -78,10 +78,10 @@ const Login = () => {
           throw new Error("회원가입 실패");
         }
         alert("회원가입 완료");
+        setIsLoginMode(true);
       } catch (error) {
         console.error(error);
       }
-      alert("회원가입 로직으로 보낼 것");
     } else {
       console.log("a")
     }
