@@ -12,7 +12,11 @@ const app = express();
 
 // 미들웨어 설정
 app.use(bodyParser.json());
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: "https://pick-your-maps.onrender.com",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
