@@ -14,7 +14,8 @@ const app = express();
 app.use(bodyParser.json());
 // app.use(cors());
 app.use(cors({
-  origin: "https://pick-your-maps.onrender.com",
+  origin: "https://pick-your-maps.vercel.app",
+  // origin: "https://pick-your-maps.onrender.com",
   credentials: true
 }));
 app.use(express.json());
